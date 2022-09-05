@@ -50,6 +50,7 @@ To create a reproducible build (advanced) and you have docker installed, you can
 ./run test_all # test
 ./run hello # run
 ```
+In windows, use `winpty env ./run test_all` and `winpty env ./run hello` instead.
 
 ## References
 
