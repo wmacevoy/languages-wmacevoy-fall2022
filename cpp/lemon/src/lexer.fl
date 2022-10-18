@@ -1,0 +1,71 @@
+%option reentrant stack noyywrap
+
+%{
+#include <iostream>
+#include "token.h"
+#include "lexer.h"
+
+#define YY_DECL Token::Ptr yylex(yyscan_t yyscanner, calc::Lexer &lexer)
+
+using namespace calc;
+using namespace std;
+%}
+
+WS  [ ]
+ADD [+]
+NUM (0|-?[1-9](_[0-9]+)*)(\.[0-9](_[0-9]+)*)?
+LINE \r?\n
+
+%%
+{WS}      {
+   lexer.column += strlen(yytext);
+}
+{ADD}     {
+   auto token = Token::add(lexer.file,lexer.line,lexer.column);
+   lexer.column += strlen(yytext);
+   return token;
+}
+
+{NUM}     {
+   auto token = Token::num(yytext,lexer.file,lexer.line,lexer.column);
+   lexer.column += strlen(yytext);
+   return token;
+}
+
+{LINE}    {
+   auto token = Token::eol(lexer.file,lexer.line,lexer.column);
+   lexer.column = 1;
+   lexer.line += 1;
+   return token;
+}
+
+<<EOF>>   {
+   auto token = Token::end(lexer.file,lexer.line,lexer.column);
+   return token;
+}
+%%
+
+namespace calc {
+  Lexer::Lexer(const std::string &_file) : file(_file), line(1), column(1) {
+    yylex_init(&yyscanner);
+    FILE *in = fopen(file.c_str(),"r");
+    if (in == 0) {
+       std::string msg = "no such file: ";
+       msg += file;
+       throw std::range_error(msg);
+    }   
+    yyset_in(in,yyscanner);
+  }
+
+  Lexer::~Lexer() {
+    FILE *in = yyget_in(yyscanner);
+    fclose(in);
+    yylex_destroy(yyscanner);
+  }
+
+  Token::Ptr Lexer::next() {
+    Token::Ptr token = yylex(yyscanner,*this);
+    cout << "Lexer@"<<((void*)this)<<"::next()=" << token << endl;
+    return token;
+  }
+}
