@@ -1,16 +1,25 @@
 #pragma once
 
-#include <vector>
+#include <memory>
 #include "token.h"
 #include "lexer.h"
+#include "parsetree.h"
 
 namespace calc {
   struct Parser {
     Lexer::Ptr lexer;
+    void *yyps;
 
-    Lexer(const std::string &_file);
-    ~Lexer();
+    void push(Token::Ptr token);
+    ParseTree::Ptr parse();
+    
+    Parser(Lexer::Ptr _lexer);
 
-    typedef std::shared_ptr < Lexer > Ptr;
+    virtual ~Parser();
+
+    bool ok;
+    ParseTree::Ptr result;
+
+    typedef std::shared_ptr < Parser > Ptr;
   };
 }
