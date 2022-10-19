@@ -3,17 +3,32 @@
 
 using namespace std;
 
+#define TEST_TOKEN(BUILD,TYPE)					      \
+  {								      \
+    ASSERT_EQ(strcmp(calc::Token::strtype(calc::Token::TYPE),#TYPE),0); \
+    ASSERT_EQ(calc::Token::BUILD->type,calc::Token::TYPE);		\
+  }
+
+TEST(Token,Location) {
+  string file = "file";
+  int32_t line = 17;
+  int32_t column = 81;
+  calc::Token::Ptr add = calc::Token::add(file,line,column);
+  ASSERT_EQ(add->file,file);
+  ASSERT_EQ(add->line,line);
+  ASSERT_EQ(add->column,column);
+}
+
 TEST(Token, Types) {
-  ASSERT_EQ(calc::Token::unknown("$")->type,calc::Token::UNKNOWN);
-  ASSERT_EQ(calc::Token::add()->type,calc::Token::ADD);
-  ASSERT_EQ(calc::Token::sub()->type,calc::Token::SUB);
-  ASSERT_EQ(calc::Token::mul()->type,calc::Token::MUL);
-  ASSERT_EQ(calc::Token::div()->type,calc::Token::DIV);
-  ASSERT_EQ(calc::Token::lp()->type,calc::Token::LP);
-  ASSERT_EQ(calc::Token::rp()->type,calc::Token::RP);
-  ASSERT_EQ(calc::Token::num("33.3")->type,calc::Token::NUM);
-  ASSERT_EQ(calc::Token::eol()->type,calc::Token::EOL);
-  ASSERT_EQ(calc::Token::end()->type,calc::Token::END);
+  TEST_TOKEN(add(),ADD);
+  TEST_TOKEN(sub(),SUB);
+  TEST_TOKEN(mul(),MUL);
+  TEST_TOKEN(div(),DIV);
+  TEST_TOKEN(lp(),LP);
+  TEST_TOKEN(rp(),RP);
+  TEST_TOKEN(num("33.3"),NUM);
+  TEST_TOKEN(eol(),EOL);
+  TEST_TOKEN(end(),END);
 }
 
 TEST(Token,Number) {

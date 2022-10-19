@@ -11,10 +11,6 @@ namespace calc {
     throw std::range_error("not a num");
   }
 
-  Token::Ptr Token::unknown(const std::string &_text, const std::string &_file, int32_t _line, int _column) {
-    return Ptr(new Token(_text,UNKNOWN,_file,_line,_column));
-  }
-  
   Token::Ptr Token::add(const std::string &_file, int32_t _line, int32_t _column) {
     return Ptr(new Token("+",ADD,_file,_line,_column));
   }
@@ -47,7 +43,6 @@ namespace calc {
 
   const char *Token::strtype(Type type) {
     switch(type) {
-    case UNKNOWN: return "UNKNOWN";
     case ADD: return "ADD";
     case SUB: return "SUB";
     case MUL: return "MUL";

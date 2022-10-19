@@ -7,7 +7,6 @@
 namespace calc {
   struct Token {
     enum Type {
-	       UNKNOWN='?',
 	       ADD='+',
 	       SUB='-',
 	       MUL='*',
@@ -27,7 +26,7 @@ namespace calc {
 
     virtual ~Token();
     Token(const std::string &_text,
-	  Type _type = UNKNOWN,
+	  Type _type,
 	  const std::string &_file="",
 	  int32_t _line=0,
 	  int32_t _column=0);
@@ -35,7 +34,6 @@ namespace calc {
 
     virtual double num() const;
 
-    static Ptr unknown(const std::string &_text, const std::string &_file="", int32_t _line = 0, int _column = 0);
     static Ptr add(const std::string &_file="", int32_t _line = 0, int32_t _column = 0);
     static Ptr sub(const std::string &_file="", int32_t _line = 0, int32_t _column = 0);
     static Ptr mul(const std::string &_file="", int32_t _line = 0, int32_t _column = 0);
