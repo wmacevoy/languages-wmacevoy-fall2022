@@ -20,7 +20,7 @@ using namespace calc;
 %}
 
 
-%token ADD SUB MUL DIV LP RP NUM ID EOL END
+%token ADD SUB MUL DIV LP RP NUM ID EOL
 
 %left ADD SUB
 %left MUL DIV

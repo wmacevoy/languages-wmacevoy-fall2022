@@ -1,6 +1,7 @@
 %option reentrant stack noyywrap
 
 %{
+#include <sstream>
 #include <iostream>
 #include "token.h"
 #include "lexer.h"
@@ -20,6 +21,7 @@ LINE \r?\n
 {WS}      {
    lexer.column += strlen(yytext);
 }
+
 {ADD}     {
    auto token = Token::add(lexer.file,lexer.line,lexer.column);
    lexer.column += strlen(yytext);
@@ -50,9 +52,9 @@ namespace calc {
     yylex_init(&yyscanner);
     FILE *in = fopen(file.c_str(),"r");
     if (in == 0) {
-       std::string msg = "no such file: ";
-       msg += file;
-       throw std::range_error(msg);
+       std::ostringstream msg;
+       msg << "file not found: " << file;
+       throw std::range_error(msg.str());
     }   
     yyset_in(in,yyscanner);
   }

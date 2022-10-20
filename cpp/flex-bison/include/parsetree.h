@@ -37,12 +37,15 @@ namespace calc {
     ParseTree(Type _type, Evaluator _evaluator,Sub sub0, Sub sub1);
     ParseTree(Type _type, Evaluator _evaluator,Sub sub0, Sub sub1, Sub sub2);
 
-    static Ptr e_add(Sub e,Sub add,Sub t);
-    static Ptr e_t(Sub t);
-    
+    // E->E '+' T | T    
+    static Ptr e_add(Sub e,Sub add,Sub t); 
+    static Ptr e_t(Sub t);                 
+
+    // T->T '*' F | F
     static Ptr t_mul(Sub t,Sub mul,Sub f);    
     static Ptr t_f(Sub f);
-    
+
+    // F->'(' E ')' | num | id
     static Ptr f_e(Sub lp, Sub e, Sub rp);
     static Ptr f_num(Sub num);
     static Ptr f_id(Sub id);

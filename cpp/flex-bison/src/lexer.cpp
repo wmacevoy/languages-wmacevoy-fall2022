@@ -431,6 +431,7 @@ static const flex_int16_t yy_chk[37] =
 #define YY_RESTORE_YY_MORE_OFFSET
 #line 1 "src/lexer.fl"
 #line 4 "src/lexer.fl"
+#include <sstream>
 #include <iostream>
 #include "token.h"
 #include "lexer.h"
@@ -439,8 +440,8 @@ static const flex_int16_t yy_chk[37] =
 
 using namespace calc;
 using namespace std;
-#line 443 "src/lexer.cpp"
 #line 444 "src/lexer.cpp"
+#line 445 "src/lexer.cpp"
 
 #define INITIAL 0
 
@@ -706,9 +707,9 @@ YY_DECL
 		}
 
 	{
-#line 19 "src/lexer.fl"
+#line 20 "src/lexer.fl"
 
-#line 712 "src/lexer.cpp"
+#line 713 "src/lexer.cpp"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -767,14 +768,14 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 20 "src/lexer.fl"
+#line 21 "src/lexer.fl"
 {
    lexer.column += strlen(yytext);
 }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 23 "src/lexer.fl"
+#line 25 "src/lexer.fl"
 {
    auto token = Token::add(lexer.file,lexer.line,lexer.column);
    lexer.column += strlen(yytext);
@@ -783,7 +784,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 29 "src/lexer.fl"
+#line 31 "src/lexer.fl"
 {
    auto token = Token::num(yytext,lexer.file,lexer.line,lexer.column);
    lexer.column += strlen(yytext);
@@ -793,7 +794,7 @@ YY_RULE_SETUP
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 35 "src/lexer.fl"
+#line 37 "src/lexer.fl"
 {
    auto token = Token::eol(lexer.file,lexer.line,lexer.column);
    lexer.column = 1;
@@ -802,7 +803,7 @@ YY_RULE_SETUP
 }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 42 "src/lexer.fl"
+#line 44 "src/lexer.fl"
 {
    auto token = Token::end(lexer.file,lexer.line,lexer.column);
    return token;
@@ -810,10 +811,10 @@ case YY_STATE_EOF(INITIAL):
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 46 "src/lexer.fl"
+#line 48 "src/lexer.fl"
 ECHO;
 	YY_BREAK
-#line 817 "src/lexer.cpp"
+#line 818 "src/lexer.cpp"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2021,7 +2022,7 @@ void yyfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 46 "src/lexer.fl"
+#line 48 "src/lexer.fl"
 
 
 namespace calc {
@@ -2029,9 +2030,9 @@ namespace calc {
     yylex_init(&yyscanner);
     FILE *in = fopen(file.c_str(),"r");
     if (in == 0) {
-       std::string msg = "no such file: ";
-       msg += file;
-       throw std::range_error(msg);
+       std::ostringstream msg;
+       msg << "file not found: " << file;
+       throw std::range_error(msg.str());
     }   
     yyset_in(in,yyscanner);
   }
