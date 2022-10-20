@@ -8,3 +8,10 @@ TEST(Hello, HelloWorld) {
   string result = hello("World");
   ASSERT_EQ(expect,result);
 }
+
+TEST(Hello, Empty) {
+  string expect = "Hello, !";
+  string result = hello("");
+  ASSERT_EQ(expect,result);
+
+}

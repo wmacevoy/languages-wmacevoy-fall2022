@@ -182,11 +182,15 @@ bin/% : $(BIN)/%
 src/lexer.cpp : src/lexer.fl
 	flex -o src/lexer.cpp src/lexer.fl
 
+#
 # horrible kludge to extract token values and not break lexer
+# (including all of include/parser.hpp creates a circular dependency)
+#
 src/parser.cpp include/parser.hpp include/calc_token.h &: src/parser.y
 	bison -o src/parser.cpp -d src/parser.y
 	mv src/parser.hpp include/parser.hpp
 	echo "#pragma once" > include/calc_token.h
-	awk 'BEGIN {p=0}; /enum yytokentype/ {p=1}; (p==1 && /}/) {exit}; (p==1 && /([A-Z]+ [=] [0-9]+)/) { print }' < include/parser.hpp | sed -E 's/ *([A-Z]+) = ([0-9]+),?.*/#define CALC_TOKEN_\1 \2/' >> include/calc_token.h
+	echo "// built automatically from include/parser.hpp on " `date`
+	awk 'BEGIN {FS="[=, ]+"; p=0}; /enum yytokentype/ {p=1}; (p==1 && /}/) {exit}; (p==1 && /([A-Z]+ [=] [0-9]+)/) { print "#define CALC_TOKEN_" $$2 " " $$3 }' < include/parser.hpp >> include/calc_token.h
 
 

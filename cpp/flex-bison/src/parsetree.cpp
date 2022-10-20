@@ -1,4 +1,4 @@
-#include <cassert>
+#include <sstream>
 #include "parsetree.h"
 
 namespace calc {
@@ -39,18 +39,21 @@ namespace calc {
     subs.at(2)=sub2;
   }
 
+// safety check that sub if parsetree of given type
+#define IS_PT(sub,TYPE) if (!std::holds_alternative<calc::ParseTree::Ptr>(sub) || !std::get<calc::ParseTree::Ptr>(sub) || std::get<calc::ParseTree::Ptr>(sub)->type != calc::ParseTree::TYPE) { std::ostringstream msg; msg << #sub << " is not " << calc::ParseTree::strtype(calc::ParseTree::TYPE) << " parse tree"; throw std::range_error(msg.str()); }
+
+// safety check that sub is token of given type
+#define IS_TK(sub,TYPE) if (!std::holds_alternative<calc::Token::Ptr>(sub) || !std::get<calc::Token::Ptr>(sub) || std::get<calc::Token::Ptr>(sub)->type != calc::Token::TYPE) { std::ostringstream msg; msg << #sub << " is not " << calc::Token::strtype(calc::Token::TYPE) << " token"; throw std::range_error(msg.str()); }
+
   // E->E+T
   ParseTree::Ptr ParseTree::e_add(Sub e, Sub add, Sub t) {
+    IS_PT(e,E); IS_TK(add,ADD); IS_PT(t,T);
     auto evaluator = [](const ParseTree &pt, Vars &vars) {
 		       // extract sub-tree components
 		       int i=0;
 		       auto &e = std::get<ParseTree::Ptr>(pt.subs[i++]);
 		       auto &add = std::get<Token::Ptr>(pt.subs[i++]);
 		       auto &t = std::get<ParseTree::Ptr>(pt.subs[i++]);
-
-		       assert(e->type == ParseTree::E);
-		       assert(add->type == Token::ADD);
-		       assert(t->type == ParseTree::T);
 
 		       return e->eval(vars) + t->eval(vars);
 		     };
@@ -60,28 +63,40 @@ namespace calc {
 
   // E->T
   ParseTree::Ptr ParseTree::e_t(Sub t) {
+    IS_PT(t,T);
     auto evaluator = [](const ParseTree &pt, Vars &vars) {
 		       // extract sub-tree components
 		       int i=0;
 		       auto &t = std::get<ParseTree::Ptr>(pt.subs[i++]);
-
-		       // validate types
-		       assert(t->type == ParseTree::T);
 
 		       return t->eval(vars);
 		     };
     return Ptr(new ParseTree(E,evaluator,t));
   }
 
+  // T->T*F
+  ParseTree::Ptr ParseTree::t_mul(Sub t, Sub mul, Sub f) {
+    IS_PT(t,T); IS_TK(mul,MUL); IS_PT(f,F);
+    auto evaluator = [](const ParseTree &pt, Vars &vars) {
+		       // extract sub-tree components
+		       int i=0;
+		       auto &t = std::get<ParseTree::Ptr>(pt.subs[i++]);
+		       auto &mul = std::get<Token::Ptr>(pt.subs[i++]);
+		       auto &f = std::get<ParseTree::Ptr>(pt.subs[i++]);
+
+		       return t->eval(vars) * f->eval(vars);
+		     };
+
+    return Ptr(new ParseTree(T,evaluator,t,mul,f));
+  }
+
   // T->F
   ParseTree::Ptr ParseTree::t_f(Sub f) {
+    IS_PT(f,F);
     auto evaluator = [](const ParseTree &pt, Vars &vars) {
 		       // extract sub-tree components
 		       int i=0;
 		       auto &f = std::get<ParseTree::Ptr>(pt.subs[i++]);
-
-		       // validate types
-		       assert(f->type == ParseTree::F);
 
 		       return f->eval(vars);
 		     };
@@ -90,17 +105,43 @@ namespace calc {
 
   // F->num
   ParseTree::Ptr ParseTree::f_num(Sub num) {
+    IS_TK(num,NUM);
     auto evaluator = [](const ParseTree &pt, Vars &vars) {
 		       // extract sub-tree components
 		       int i=0;
 		       auto &num = std::get<Token::Ptr>(pt.subs[i++]);
 
-		       // validate types
-		       assert(num->type == Token::NUM);
-
 		       return num->num();
 		     };
     return Ptr(new ParseTree(F,evaluator,num));
+  }
+
+  // F->id
+  ParseTree::Ptr ParseTree::f_id(Sub id) {
+    IS_TK(id,ID);
+    auto evaluator = [](const ParseTree &pt, Vars &vars) {
+		       // extract sub-tree components
+		       int i=0;
+		       auto &id = std::get<Token::Ptr>(pt.subs[i++]);
+
+		       return vars[id->id()];
+		     };
+    return Ptr(new ParseTree(F,evaluator,id));
+  }
+
+  // F->e
+  ParseTree::Ptr ParseTree::f_e(Sub lp,Sub e,Sub rp) {
+    IS_TK(lp,LP); IS_PT(e,E); IS_TK(rp,RP);
+    auto evaluator = [](const ParseTree &pt, Vars &vars) {
+		       // extract sub-tree components
+		       int i=0;
+		       auto &lp = std::get<Token::Ptr>(pt.subs[i++]);
+		       auto &e = std::get<ParseTree::Ptr>(pt.subs[i++]);
+		       auto &rp = std::get<Token::Ptr>(pt.subs[i++]);		       
+
+		       return e->eval(vars);
+		     };
+    return Ptr(new ParseTree(F,evaluator,lp,e,rp));
   }
   
 }

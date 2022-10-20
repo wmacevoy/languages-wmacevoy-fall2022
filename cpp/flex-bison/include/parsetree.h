@@ -10,13 +10,23 @@
 
 namespace calc {
   struct ParseTree {
+    // these are the "non-terminals"
     enum Type { E, T, F };
     Type type;
+    // convert to simple name "E" for E type, etc.    
     static const char *strtype(Type type);
     typedef std::shared_ptr < ParseTree > Ptr;
-    typedef std::variant < Token::Ptr , Ptr > Sub;
+
+    // productions like e -> e ADD t have terminals (token pointers) and nonterminals (parsetree pointers),
+    // so is represented as a vector of "substitutions" of token/trees.
+    typedef std::variant < Token::Ptr , ParseTree::Ptr > Sub;
     std::vector < Sub > subs;
 
+    //
+    // Vars (eventually) is how to have information about values like ID's
+    // evaluator is a way to evaluate a parse tree given vars as map of
+    // assignments
+    //
     typedef std::map < std::string , double > Vars;
     typedef std::function < double (const ParseTree &,Vars &) > Evaluator;
     Evaluator evaluator;
@@ -29,7 +39,12 @@ namespace calc {
 
     static Ptr e_add(Sub e,Sub add,Sub t);
     static Ptr e_t(Sub t);
+    
+    static Ptr t_mul(Sub t,Sub mul,Sub f);    
     static Ptr t_f(Sub f);
+    
+    static Ptr f_e(Sub lp, Sub e, Sub rp);
     static Ptr f_num(Sub num);
+    static Ptr f_id(Sub id);
   };
 }

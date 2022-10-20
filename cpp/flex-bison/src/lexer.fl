@@ -11,7 +11,7 @@ using namespace calc;
 using namespace std;
 %}
 
-WS  [ ]
+WS  [ ]+
 ADD [+]
 NUM (0|-?[1-9](_[0-9]+)*)(\.[0-9](_[0-9]+)*)?
 LINE \r?\n
@@ -64,7 +64,7 @@ namespace calc {
   }
 
   Token::Ptr Lexer::next() {
-    Token::Ptr token = yylex(yyscanner,*this);
+    auto token = yylex(yyscanner,*this);
     cout << "Lexer@"<<((void*)this)<<"::next()=" << token << endl;
     return token;
   }

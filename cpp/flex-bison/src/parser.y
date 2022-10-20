@@ -4,6 +4,8 @@
 %parse-param  { calc::Parser *me }
 
 %{
+#include <iostream>
+#include <sstream>
 #include "token.h"
 #include "parsetree.h"
 #include "parser.h"
@@ -11,28 +13,40 @@
 using namespace calc;
 
  void yyerror(Parser *me, const char *msg) {
-   throw std::range_error(msg);
+   std::ostringstream oss;
+   oss << me->lexer->file << " " << me->lexer->line << " " << me->lexer->column << ": " << msg;
+   throw std::range_error(oss.str());
  }
 %}
 
 
-%token ADD SUB MUL DIV LP RP NUM EOL END
+%token ADD SUB MUL DIV LP RP NUM ID EOL END
 
 %left ADD SUB
 %left MUL DIV
 
 %%
-s : e { me->result = std::get<ParseTree::Ptr>($1); }
+program
+  : program EOL statement
+  | statement
+  ;
+
+statement
+  : /* empty */
+  | e { ParseTree::Vars vars; auto E = std::get<ParseTree::Ptr>($1); std::cout << E->eval(vars) << std::endl; }
   ;
 
 e : e ADD t { $$ = ParseTree::e_add($1,$2,$3); }
   | t       { $$ = ParseTree::e_t($1); }
   ;
 
-t : f       { $$ = ParseTree::t_f($1); }
+t : t MUL f { $$ = ParseTree::t_mul($1,$2,$3); }
+  | f       { $$ = ParseTree::t_f($1); }
   ;
 
 f : NUM     { $$ = ParseTree::f_num($1); }
+  | ID      { $$ = ParseTree::f_id($1); }
+  | LP e RP { $$ = ParseTree::f_e($1,$2,$3); }
   ;
 
 %%
@@ -52,8 +66,8 @@ namespace calc {
     result = nullptr;
     do {
       auto token = lexer->next();
-      ParseTree::Sub value(token);
-      status = yypush_parse ((yypstate*)(yyps), token->type, &value, this);
+      ParseTree::Sub stoken(token);
+      status = yypush_parse ((yypstate*)(yyps), token->type, &stoken, this);
     } while (status == YYPUSH_MORE);
 
     return result;

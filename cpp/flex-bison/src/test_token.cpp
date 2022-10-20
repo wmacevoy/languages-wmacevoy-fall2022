@@ -27,6 +27,7 @@ TEST(Token, Types) {
   TEST_TOKEN(lp(),LP);
   TEST_TOKEN(rp(),RP);
   TEST_TOKEN(num("33.3"),NUM);
+  TEST_TOKEN(id("xyz"),ID);  
   TEST_TOKEN(eol(),EOL);
   TEST_TOKEN(end(),END);
 }
@@ -34,4 +35,9 @@ TEST(Token, Types) {
 TEST(Token,Number) {
   calc::Token::Ptr tk = calc::Token::num("33.3");
   ASSERT_NEAR(tk->num(),33.3,1e-12);
+}
+
+TEST(Token,ID) {
+  calc::Token::Ptr tk = calc::Token::id("xyz");
+  ASSERT_EQ(tk->id(),"xyz");
 }

@@ -11,6 +11,13 @@ namespace calc {
     throw std::range_error("not a num");
   }
 
+  std::string Token::id() const {
+    if (type != ID) {
+      throw std::range_error("not an id");
+    }
+    return text;
+  }
+  
   Token::Ptr Token::add(const std::string &_file, int32_t _line, int32_t _column) {
     return Ptr(new Token("+",ADD,_file,_line,_column));
   }
@@ -33,6 +40,9 @@ namespace calc {
   Token::Ptr Token::num(const std::string &_text, const std::string &_file, int32_t _line, int32_t _column) {
     return Ptr(new NumberToken(_text,_file,_line,_column));
   }
+  Token::Ptr Token::id(const std::string &_text, const std::string &_file, int32_t _line, int32_t _column) {
+    return Ptr(new Token(_text,ID,_file,_line,_column));
+  }
   Token::Ptr Token::eol(const std::string &_file, int32_t _line, int32_t _column) {
     return Ptr(new Token("<EOL>",EOL,_file,_line,_column));
   }
@@ -50,6 +60,7 @@ namespace calc {
     case RP: return "RP";
     case LP: return "LP";
     case NUM: return "NUM";
+    case ID: return "ID";      
     case EOL: return "EOL";
     case END: return "END";
     default: return "?";
