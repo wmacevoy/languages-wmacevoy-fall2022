@@ -1,10 +1,14 @@
 #include <sstream>
+#include <iostream>
+
 #include "parsetree.h"
 
 namespace calc {
 
   const char *ParseTree::strtype(Type type) {
     switch(type) {
+    case PROGRAM: return "PROGRAM";
+    case STATEMENT: return "STATEMENT";
     case E: return "E";
     case T: return "T";
     case F: return "F";
@@ -44,6 +48,60 @@ namespace calc {
 
 // safety check that sub is token of given type
 #define IS_TK(sub,TYPE) if (!std::holds_alternative<calc::Token::Ptr>(sub) || !std::get<calc::Token::Ptr>(sub) || std::get<calc::Token::Ptr>(sub)->type != calc::Token::TYPE) { std::ostringstream msg; msg << #sub << " is not " << calc::Token::strtype(calc::Token::TYPE) << " token"; throw std::range_error(msg.str()); }
+
+  // program -> program EOL statement
+  ParseTree::Ptr ParseTree::program_ps(Sub program, Sub eol, Sub statement) {
+    IS_PT(program,PROGRAM); IS_TK(eol,EOL); IS_PT(statement,STATEMENT);
+    auto evaluator = [](const ParseTree &pt, Vars &vars) {
+		       // extract sub-tree components
+		       int i=0;
+		       auto &program = std::get<ParseTree::Ptr>(pt.subs[i++]);
+		       auto &eol = std::get<Token::Ptr>(pt.subs[i++]);
+		       auto &statement = std::get<ParseTree::Ptr>(pt.subs[i++]);
+
+		       double value = program->eval(vars);
+		       if (statement->subs.size() > 0) {
+			 value = statement->eval(vars);
+		       }
+		       return value;
+		     };
+    return Ptr(new ParseTree(PROGRAM,evaluator,program,eol,statement));
+  }
+
+  // program -> statement
+  ParseTree::Ptr ParseTree::program_s(Sub statement) {
+    IS_PT(statement,STATEMENT);
+    auto evaluator = [](const ParseTree &pt, Vars &vars) {
+		       // extract sub-tree components
+		       int i=0;
+		       auto &statement = std::get<ParseTree::Ptr>(pt.subs[i++]);
+
+		       return statement->eval(vars);
+		     };
+    return Ptr(new ParseTree(PROGRAM,evaluator,statement));
+  }
+
+  // statement -> empty
+  ParseTree::Ptr ParseTree::statement_empty() {
+    auto evaluator = [](const ParseTree &pt, Vars &vars) {
+		       return 0.0;
+		     };
+    return Ptr(new ParseTree(STATEMENT,evaluator));
+  }
+  
+  // statement -> e
+  ParseTree::Ptr ParseTree::statement_e(Sub e) {
+    IS_PT(e,E);    
+    auto evaluator = [](const ParseTree &pt, Vars &vars) {
+		       // extract sub-tree components
+		       int i=0;
+		       auto &e = std::get<ParseTree::Ptr>(pt.subs[i++]);
+		       double value = e->eval(vars);
+		       std::cout << value << std::endl;
+		       return value;
+		     };
+    return Ptr(new ParseTree(STATEMENT,evaluator,e));
+  }
 
   // E->E+T
   ParseTree::Ptr ParseTree::e_add(Sub e, Sub add, Sub t) {

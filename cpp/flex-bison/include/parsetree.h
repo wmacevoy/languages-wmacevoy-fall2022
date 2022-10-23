@@ -11,7 +11,7 @@
 namespace calc {
   struct ParseTree {
     // these are the "non-terminals"
-    enum Type { E, T, F };
+    enum Type { PROGRAM, STATEMENT, E, T, F };
     Type type;
     // convert to simple name "E" for E type, etc.    
     static const char *strtype(Type type);
@@ -36,6 +36,14 @@ namespace calc {
     ParseTree(Type _type, Evaluator _evaluator,Sub sub0);
     ParseTree(Type _type, Evaluator _evaluator,Sub sub0, Sub sub1);
     ParseTree(Type _type, Evaluator _evaluator,Sub sub0, Sub sub1, Sub sub2);
+
+    // program -> program EOL statement | statement
+    static Ptr program_ps(Sub program, Sub EOL, Sub statement);
+    static Ptr program_s(Sub statement);
+    
+    // statement -> empty | E
+    static Ptr statement_empty();
+    static Ptr statement_e(Sub e);
 
     // E->E '+' T | T    
     static Ptr e_add(Sub e,Sub add,Sub t); 

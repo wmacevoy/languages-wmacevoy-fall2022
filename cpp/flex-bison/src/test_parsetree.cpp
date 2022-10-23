@@ -62,3 +62,36 @@ TEST(ParseTree,e_add) {
 
   TEST_TREE(e_add(e3,add,tX),E,13.0);
 }
+
+TEST(ParseTree,statement_empty) {
+  TEST_TREE(statement_empty(),STATEMENT,0.0);
+}
+
+TEST(ParseTree,statement_e) {
+  auto tk3=Token::num("3");
+  auto f3=ParseTree::f_num(tk3);
+  auto t3=ParseTree::t_f(f3);
+  auto e3=ParseTree::e_t(t3);
+  TEST_TREE(statement_e(e3),STATEMENT,3.0);
+}
+
+TEST(ParseTree,program_s) {
+  auto tk3=Token::num("3");
+  auto f3=ParseTree::f_num(tk3);
+  auto t3=ParseTree::t_f(f3);
+  auto e3=ParseTree::e_t(t3);
+  auto s3=ParseTree::statement_e(e3); 
+  TEST_TREE(program_s(s3),PROGRAM,3.0);
+}
+
+TEST(ParseTree,program_ps) {
+  auto snull=ParseTree::statement_empty();
+  auto pnull=ParseTree::program_s(snull);
+  auto eol = Token::eol();
+  auto tk3=Token::num("3");
+  auto f3=ParseTree::f_num(tk3);
+  auto t3=ParseTree::t_f(f3);
+  auto e3=ParseTree::e_t(t3);
+  auto s3=ParseTree::statement_e(e3);
+  TEST_TREE(program_ps(pnull,eol,s3),PROGRAM,3.0);
+}

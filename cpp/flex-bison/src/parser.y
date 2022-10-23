@@ -1,7 +1,7 @@
 %define api.value.type {calc::ParseTree::Sub}
 %define api.pure full
 %define api.push-pull push
-%parse-param  { calc::Parser *me }
+%parse-param  { calc::Parser *parser }
 
 %{
 #include <iostream>
@@ -12,9 +12,9 @@
 
 using namespace calc;
 
- void yyerror(Parser *me, const char *msg) {
+ void yyerror(Parser *parser, const char *msg) {
    std::ostringstream oss;
-   oss << me->lexer->file << " " << me->lexer->line << " " << me->lexer->column << ": " << msg;
+   oss << parser->lexer->file << " " << parser->lexer->line << " " << parser->lexer->column << ": " << msg;
    throw std::range_error(oss.str());
  }
 %}
@@ -26,14 +26,16 @@ using namespace calc;
 %left MUL DIV
 
 %%
+start : program            { parser->result = std::get<ParseTree::Ptr>($1); }
+
 program
-  : program EOL statement
-  | statement
+  : program EOL statement  { $$ = ParseTree::program_ps($1,$2,$3); }
+  | statement              { $$ = ParseTree::program_s($1); }
   ;
 
 statement
-  : /* empty */
-  | e { ParseTree::Vars vars; auto E = std::get<ParseTree::Ptr>($1); std::cout << E->eval(vars) << std::endl; }
+  :   { $$ = ParseTree::statement_empty(); }
+  | e { $$ = ParseTree::statement_e($1); }
   ;
 
 e : e ADD t { $$ = ParseTree::e_add($1,$2,$3); }
