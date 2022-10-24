@@ -69,5 +69,15 @@ namespace calc {
     virtual ~NumberToken();
   };
 
+  struct IdToken : Token {
+    IdToken(const std::string &_text,
+		const std::string &_file="",
+		int32_t _line=0,
+		int32_t _column=0);
+    virtual std::string id() const;
+    virtual void print(std::ostream &out) const;    
+    virtual ~IdToken();
+  };
+  
   std::ostream& operator<<(std::ostream &out, const Token::Ptr &token);
 }

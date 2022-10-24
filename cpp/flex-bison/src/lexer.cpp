@@ -339,8 +339,8 @@ static void yynoreturn yy_fatal_error ( const char* msg , yyscan_t yyscanner );
 	yyg->yy_hold_char = *yy_cp; \
 	*yy_cp = '\0'; \
 	yyg->yy_c_buf_p = yy_cp;
-#define YY_NUM_RULES 5
-#define YY_END_OF_BUFFER 6
+#define YY_NUM_RULES 9
+#define YY_END_OF_BUFFER 10
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -348,11 +348,11 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static const flex_int16_t yy_accept[22] =
+static const flex_int16_t yy_accept[27] =
     {   0,
-        0,    0,    6,    5,    4,    5,    1,    2,    5,    3,
-        3,    4,    1,    3,    0,    0,    3,    3,    0,    3,
-        0
+        0,    0,   10,    9,    8,    9,    1,    6,    7,    3,
+        2,    9,    4,    4,    5,    8,    1,    4,    0,    4,
+        0,    5,    4,    4,    0,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -360,17 +360,17 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    1,    2,
         1,    1,    3,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    4,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    5,    1,    6,    7,    1,    8,    9,    9,
-        9,    9,    9,    9,    9,    9,    9,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,   10,    1,    1,    1,    1,    1,
+        1,    4,    1,    1,    1,    1,    1,    1,    1,    5,
+        6,    7,    8,    1,    9,   10,    1,   11,   12,   12,
+       12,   12,   12,   12,   12,   12,   12,    1,    1,    1,
+        1,    1,    1,    1,   13,   13,   13,   13,   13,   13,
+       13,   13,   13,   13,   13,   13,   13,   13,   13,   13,
+       13,   13,   13,   13,   13,   13,   13,   13,   13,   13,
+        1,    1,    1,    1,   14,    1,   13,   13,   13,   13,
 
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+       13,   13,   13,   13,   13,   13,   13,   13,   13,   13,
+       13,   13,   13,   13,   13,   13,   13,   13,   13,   13,
+       13,   13,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -387,39 +387,42 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static const YY_CHAR yy_meta[11] =
-    {   0,
-        1,    1,    1,    1,    1,    1,    1,    2,    2,    1
-    } ;
-
-static const flex_int16_t yy_base[25] =
-    {   0,
-        0,    0,   25,   26,   26,   22,   19,   26,   13,   14,
-        4,   26,   16,    0,    0,    0,    9,    8,    0,    7,
-       26,   14,   11,   10
-    } ;
-
-static const flex_int16_t yy_def[25] =
-    {   0,
-       21,    1,   21,   21,   21,   21,   21,   21,   21,   21,
-       21,   21,   21,   11,   22,   23,   21,   23,   24,   24,
-        0,   21,   21,   21
-    } ;
-
-static const flex_int16_t yy_nxt[37] =
-    {   0,
-        4,    5,    6,    7,    8,    9,    4,   10,   11,    4,
-       15,   20,   18,   16,   15,   17,   19,   16,   19,   13,
-       15,   14,   13,   12,   21,    3,   21,   21,   21,   21,
-       21,   21,   21,   21,   21,   21
-    } ;
-
-static const flex_int16_t yy_chk[37] =
+static const YY_CHAR yy_meta[15] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-       11,   24,   23,   11,   18,   22,   20,   18,   17,   13,
-       10,    9,    7,    6,    3,   21,   21,   21,   21,   21,
-       21,   21,   21,   21,   21,   21
+        2,    2,    3,    2
+    } ;
+
+static const flex_int16_t yy_base[29] =
+    {   0,
+        0,    0,   35,   36,   36,   32,   29,   36,   36,   36,
+       36,   20,   21,    5,    0,   36,   26,    0,    9,    0,
+       11,    0,   15,   14,   13,   36,   24,   16
+    } ;
+
+static const flex_int16_t yy_def[29] =
+    {   0,
+       26,    1,   26,   26,   26,   26,   26,   26,   26,   26,
+       26,   26,   26,   26,   27,   26,   26,   14,   26,   14,
+       26,   27,   28,   28,   26,    0,   26,   26
+    } ;
+
+static const flex_int16_t yy_nxt[51] =
+    {   0,
+        4,    5,    6,    7,    8,    9,   10,   11,   12,    4,
+       13,   14,   15,    4,   19,   20,   20,   24,   21,   23,
+       23,   20,   20,   24,   24,   22,   22,   25,   25,   17,
+       19,   18,   17,   16,   26,    3,   26,   26,   26,   26,
+       26,   26,   26,   26,   26,   26,   26,   26,   26,   26
+    } ;
+
+static const flex_int16_t yy_chk[51] =
+    {   0,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,   14,   14,   14,   28,   14,   19,
+       19,   21,   21,   25,   25,   27,   27,   24,   23,   17,
+       13,   12,    7,    6,    3,   26,   26,   26,   26,   26,
+       26,   26,   26,   26,   26,   26,   26,   26,   26,   26
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -432,16 +435,17 @@ static const flex_int16_t yy_chk[37] =
 #line 1 "src/lexer.fl"
 #line 4 "src/lexer.fl"
 #include <sstream>
-#include <iostream>
+#include <fstream>
 #include "token.h"
 #include "lexer.h"
 
-#define YY_DECL Token::Ptr yylex(yyscan_t yyscanner, calc::Lexer &lexer)
+#define YY_DECL Token::Ptr yylex(yyscan_t yyscanner)
+#define YY_INPUT(buf,result,max_size) { yyextra->in->read(buf,max_size); result = yyextra->in->gcount(); }
 
 using namespace calc;
 using namespace std;
-#line 444 "src/lexer.cpp"
-#line 445 "src/lexer.cpp"
+#line 448 "src/lexer.cpp"
+#line 449 "src/lexer.cpp"
 
 #define INITIAL 0
 
@@ -453,9 +457,7 @@ using namespace std;
 #include <unistd.h>
 #endif
 
-#ifndef YY_EXTRA_TYPE
-#define YY_EXTRA_TYPE void *
-#endif
+#define YY_EXTRA_TYPE calc::Lexer *
 
 /* Holds the entire state of the reentrant scanner. */
 struct yyguts_t
@@ -707,9 +709,9 @@ YY_DECL
 		}
 
 	{
-#line 20 "src/lexer.fl"
+#line 25 "src/lexer.fl"
 
-#line 713 "src/lexer.cpp"
+#line 715 "src/lexer.cpp"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -736,13 +738,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 22 )
+				if ( yy_current_state >= 27 )
 					yy_c = yy_meta[yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 26 );
+		while ( yy_base[yy_current_state] != 36 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -768,53 +770,89 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 21 "src/lexer.fl"
+#line 26 "src/lexer.fl"
 {
-   lexer.column += strlen(yytext);
+   yyextra->column += strlen(yytext);
 }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 25 "src/lexer.fl"
+#line 30 "src/lexer.fl"
 {
-   auto token = Token::add(lexer.file,lexer.line,lexer.column);
-   lexer.column += strlen(yytext);
+   auto token = Token::add(yyextra->file,yyextra->line,yyextra->column);
+   yyextra->column += strlen(yytext);
    return token;
 }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 31 "src/lexer.fl"
+#line 36 "src/lexer.fl"
 {
-   auto token = Token::num(yytext,lexer.file,lexer.line,lexer.column);
-   lexer.column += strlen(yytext);
+   auto token = Token::mul(yyextra->file,yyextra->line,yyextra->column);
+   yyextra->column += strlen(yytext);
    return token;
 }
 	YY_BREAK
 case 4:
-/* rule 4 can match eol */
 YY_RULE_SETUP
-#line 37 "src/lexer.fl"
+#line 43 "src/lexer.fl"
 {
-   auto token = Token::eol(lexer.file,lexer.line,lexer.column);
-   lexer.column = 1;
-   lexer.line += 1;
-   return token;
-}
-	YY_BREAK
-case YY_STATE_EOF(INITIAL):
-#line 44 "src/lexer.fl"
-{
-   auto token = Token::end(lexer.file,lexer.line,lexer.column);
+   auto token = Token::num(yytext,yyextra->file,yyextra->line,yyextra->column);
+   yyextra->column += strlen(yytext);
    return token;
 }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 48 "src/lexer.fl"
+#line 50 "src/lexer.fl"
+{
+   auto token = Token::id(yytext,yyextra->file,yyextra->line,yyextra->column);
+   yyextra->column += strlen(yytext);
+   return token;
+}
+	YY_BREAK
+case 6:
+YY_RULE_SETUP
+#line 56 "src/lexer.fl"
+{
+   auto token = Token::lp(yyextra->file,yyextra->line,yyextra->column);
+   yyextra->column += strlen(yytext);
+   return token;
+}
+	YY_BREAK
+case 7:
+YY_RULE_SETUP
+#line 62 "src/lexer.fl"
+{
+   auto token = Token::rp(yyextra->file,yyextra->line,yyextra->column);
+   yyextra->column += strlen(yytext);
+   return token;
+}
+	YY_BREAK
+case 8:
+/* rule 8 can match eol */
+YY_RULE_SETUP
+#line 68 "src/lexer.fl"
+{
+   auto token = Token::eol(yyextra->file,yyextra->line,yyextra->column);
+   yyextra->column = 1;
+   yyextra->line += 1;
+   return token;
+}
+	YY_BREAK
+case YY_STATE_EOF(INITIAL):
+#line 75 "src/lexer.fl"
+{
+   auto token = Token::end(yyextra->file,yyextra->line,yyextra->column);
+   return token;
+}
+	YY_BREAK
+case 9:
+YY_RULE_SETUP
+#line 79 "src/lexer.fl"
 ECHO;
 	YY_BREAK
-#line 818 "src/lexer.cpp"
+#line 856 "src/lexer.cpp"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1111,7 +1149,7 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 22 )
+			if ( yy_current_state >= 27 )
 				yy_c = yy_meta[yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
@@ -1140,11 +1178,11 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 22 )
+		if ( yy_current_state >= 27 )
 			yy_c = yy_meta[yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
-	yy_is_jam = (yy_current_state == 21);
+	yy_is_jam = (yy_current_state == 26);
 
 	(void)yyg;
 	return yy_is_jam ? 0 : yy_current_state;
@@ -2022,19 +2060,13 @@ void yyfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 48 "src/lexer.fl"
+#line 79 "src/lexer.fl"
 
 
 namespace calc {
-  Lexer::Lexer(const std::string &_file) : file(_file), line(1), column(1) {
-    yylex_init(&yyscanner);
-    FILE *in = fopen(file.c_str(),"r");
-    if (in == 0) {
-       std::ostringstream msg;
-       msg << "file not found: " << file;
-       throw std::range_error(msg.str());
-    }   
-    yyset_in(in,yyscanner);
+  Lexer::Lexer()
+  : line(1), column(1) {
+    yylex_init_extra(this,&yyscanner);
   }
 
   Lexer::~Lexer() {
@@ -2044,9 +2076,33 @@ namespace calc {
   }
 
   Token::Ptr Lexer::next() {
-    auto token = yylex(yyscanner,*this);
+    auto token = yylex(yyscanner);
     cout << "Lexer@"<<((void*)this)<<"::next()=" << token << endl;
     return token;
   }
+
+  Lexer::Ptr Lexer::fromFile(const std::string &filename) {
+    Lexer::Ptr ans(new Lexer());
+    ans->file = filename;
+    ans->in = std::shared_ptr < std::istream > (new std::ifstream(filename));
+    return ans;
+  }
+  
+  Lexer::Ptr Lexer::fromStdin() {
+    Lexer::Ptr ans(new Lexer());
+    ans->file = "stdin";
+    ans->in = std::shared_ptr < std::istream > (&std::cin,[](std::istream*){});
+    return ans;
+  }
+  
+  Lexer::Ptr Lexer::fromString(const std::string &value) {
+    Lexer::Ptr ans(new Lexer());
+    ans->file += "'";
+    ans->file += value;
+    ans->file += "'";    
+    ans->in = std::shared_ptr < std::istream > (new std::istringstream(value));
+    return ans;
+  }
+
 }
 

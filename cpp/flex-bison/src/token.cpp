@@ -12,10 +12,7 @@ namespace calc {
   }
 
   std::string Token::id() const {
-    if (type != ID) {
-      throw std::range_error("not an id");
-    }
-    return text;
+    throw std::range_error("not an id");
   }
   
   Token::Ptr Token::add(const std::string &_file, int32_t _line, int32_t _column) {
@@ -41,7 +38,7 @@ namespace calc {
     return Ptr(new NumberToken(_text,_file,_line,_column));
   }
   Token::Ptr Token::id(const std::string &_text, const std::string &_file, int32_t _line, int32_t _column) {
-    return Ptr(new Token(_text,ID,_file,_line,_column));
+    return Ptr(new IdToken(_text,_file,_line,_column));
   }
   Token::Ptr Token::eol(const std::string &_file, int32_t _line, int32_t _column) {
     return Ptr(new Token("<EOL>",EOL,_file,_line,_column));
@@ -84,6 +81,22 @@ namespace calc {
   void NumberToken::print(std::ostream &out) const {
     out << "NumberToken(" << text << "," << Token::strtype(type) << "," << file << "," << line << "," << column << ")";
   }
+
+
+  IdToken::IdToken(const std::string &_text, 
+	       const std::string &_file, int32_t _line, int32_t _column)
+    : Token(_text,Token::ID,_file,_line,_column) {}
+
+  IdToken::~IdToken() {}
+  
+  std::string IdToken::id() const {
+    return text;
+  }
+
+  void IdToken::print(std::ostream &out) const {
+    out << "IdToken(" << text << "," << Token::strtype(type) << "," << file << "," << line << "," << column << ")";
+  }
+  
 
   std::ostream& operator<<(std::ostream &out, const Token::Ptr &token) {
     token->print(out);

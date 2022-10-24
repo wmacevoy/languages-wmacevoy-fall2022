@@ -5,7 +5,7 @@
 #include "gtest/gtest.h"
 
 TEST(Parser,Example1) {
-  calc::Lexer::Ptr lexer(new calc::Lexer("example1.calc"));
+  auto lexer = calc::Lexer::fromFile("example1.calc");
   calc::Parser::Ptr parser(new calc::Parser(lexer));
 
   calc::ParseTree::Ptr parsetree = parser->parse();
@@ -13,6 +13,25 @@ TEST(Parser,Example1) {
   calc::ParseTree::Vars vars;
 
   vars["X"] = 10.0;
-
   ASSERT_EQ(parsetree->eval(vars), 3.0);
+}
+
+
+TEST(Parser,Example2) {
+  auto lexer = calc::Lexer::fromFile("example2.calc");
+  calc::Parser::Ptr parser(new calc::Parser(lexer));
+
+  calc::ParseTree::Ptr parsetree = parser->parse();
+
+  calc::ParseTree::Vars vars;
+
+  double X = 10.0;
+  double Cat = 9.0;
+  double Dog = 7;
+
+  vars["X"] = X;
+  vars["Cat"] = Cat;
+  vars["Dog"] = Dog;
+
+  ASSERT_EQ(parsetree->eval(vars), (Cat+Dog)*X+18.0);
 }
