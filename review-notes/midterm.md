@@ -25,4 +25,58 @@ x?=x{0,1}
 
 ## Grammars
 
+Grammars are like Reg. Exp, in that they describe a set of strings.  They do it as a set
+of substitutions (or productions).  These productions also help structure the string.
+
+"strings" are now a sequence of tokens (reserved words, ids, literals, operators, etc.)
+In the grammar; tokens are the terminals. 
+
+The non-terminals are typically conceptual components (T for term, BLOCK, program, etc.)  They eventually mean some specific sequence of tokens after enough substitutions in the
+grammer.  The tree of substitutions is the parse tree.
+
+tokens(terminals) = { '+', '-', '*', '/', '(', ')', id, num }
+non-terminals = { S, E, T, F }
+S -> E
+E -> E '+' T | E '-' T | T
+T -> T '*' F | T '/' F | F
+F -> id | num | ( E )
+
+
 ## Compiler / Interpreter Design Basics
+
+bytes -> (utf8) unicode -> (reg ex) tokens -> 
+   (recursive descent/shift-reduce parser) parse tree -> "back end"
+
+Ex questions:
+
+Q. Give examples of a functional language (or parts of a language that are functional)
+
+Q. What is problem is best solved procedurally?  When the clearest way to describe something is the steps to produce the outcome.  Since most computers are VonNeumann (procedural) machines, 
+the end result has to be procedural so compiler builders and low-level designers are probably
+procedural.
+
+Functional - when there are lots of interacting parts, functional approach simplifies understanding
+the "state" - since there is no state.  They are also easier to test.
+
+Q. Make a parse tree for 3-5+2 using the grammar ....
+
+Q. Write some algorithm procedurally & functionally.
+
+def fib(k):
+  x0 = 0
+  x1 = 1
+  for i in range(k):
+    x2 = x1 + x0
+    x0 = x1
+    x1 = x2
+  return x0
+
+def fib(k):
+   return k if k <= 1 else fib(k-1)+fib(k-2)
+
+Q. Why is it important to restrict a language?  How do they interact?  C++ source vs HTML - compatibilty, speed, security.
+
+Q. Whats the difference between pass-by-value and pass-by-reference?
+
+Q. Give an example of an OO pattern that may be helpful in a design.
+
