@@ -19,8 +19,8 @@
 #
 #    Typical targets:
 #
-#	make bin/hello
-#       make bin/test_hello
+#	make bin/hello      # assuming src/main_hello.cpp has a main()
+#       make bin/test_hello # assuming src/test_hello.cpp has googletests 
 #       make clean
 #       make all
 #       make tests
@@ -43,7 +43,7 @@ CXXSTDS := g++20 c++20 g++2a c++2a g++17 c++17
 # choose first CXXSTD that the compiler accepts
 CXXSTD := $(shell for std in $(CXXSTDS) ; do if echo "void test();" | $(CXX) -x c++ -E -std=$$std - >/dev/null 2>&1 ; then echo $$std ; break ; fi ; done)
 
-CXXFLAGS:=-pthread -Iinclude -g -std=${CXXSTD} -fPIC
+CXXFLAGS:=-pthread -Iinclude -O -g -std=${CXXSTD} -fPIC
 
 include Makefile.googletest
 
