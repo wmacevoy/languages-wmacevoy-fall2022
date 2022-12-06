@@ -26,7 +26,7 @@ windows() {
 winenv() {
     if windows
     then
-	winpty env "$@"
+	winpty "$@"
     else
 	"$@"
     fi
@@ -99,5 +99,5 @@ else
     winenv docker run -it --rm \
 	   -v "$HOST_DIR:$GUEST_DIR" \
 	   "$DOCKER_TAG" \
-	   /bin/bash -i
+	   bash -i
 fi
