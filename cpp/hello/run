@@ -24,6 +24,15 @@ winpath() {
     fi
 }
 
+winenv() {
+    if windows
+    then
+	winpty "$@"
+    else
+	"$@"
+    fi
+}
+
 # use the directory name as the tag name for docker
 DOCKER_TAG=$(basename "$SCRIPT_DIR")
 
@@ -52,14 +61,16 @@ fi
 echo "docker run '$DOCKER_TAG' (mounting host '$HOST_DIR' as '$GUEST_DIR'): " "$@"
 if [ $# -gt 0 ]
 then
-    docker run -it --rm \
+    winenv docker run -it --rm \
 	   -v "$HOST_DIR:$GUEST_DIR" \
+	   -p 8888:8888 \
 	   "$DOCKER_TAG" \
 	   "$@"
 else
     echo "Type CTRL-D or exit to exit the interactive shell"
-    docker run -it --rm \
+    winenv docker run -it --rm \
 	   -v "$HOST_DIR:$GUEST_DIR" \
+	   -p 8888:8888 \
 	   "$DOCKER_TAG" \
-	   /bin/bash -i
+	   bash -i
 fi
