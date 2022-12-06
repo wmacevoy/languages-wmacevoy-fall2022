@@ -11,6 +11,27 @@ then
 fi
 echo "Working directory is $SCRIPT_DIR"
 
+windows() {
+    if which cygpath > /dev/null # git-bash/msys/cygwin
+    then
+	return 0
+    fi
+    if [ -r /proc/version ] && grep -q Microsoft /proc/version
+    then
+	return 0
+    fi
+    return 1
+}
+
+winenv() {
+    if windows
+    then
+	winpty "$@"
+    else
+	"$@"
+    fi
+}
+
 # Try to convert for big-bash/msys/cygwin/wsl...
 winpath() {
     if which cygpath > /dev/null # git-bash/msys/cygwin
@@ -21,15 +42,6 @@ winpath() {
 	echo readlink -m "$@" | sed 's|^/mnt/\([a-z]\)|\U\1:|' | sed 's|/|\\|g'
     else
 	echo "$@"
-    fi
-}
-
-winenv() {
-    if windows
-    then
-	winpty "$@"
-    else
-	"$@"
     fi
 }
 
